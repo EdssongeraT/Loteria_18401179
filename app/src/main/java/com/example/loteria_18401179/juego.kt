@@ -9,35 +9,34 @@ class juego(activity: MainActivity,indices:Array<Int>):Thread(){
     private var pausar = false
     var i=0
     var mazoCompleto = true
-
     override fun run() {
         super.run()
         mazoCompleto = false
-
+        dormir(3000)
             while (i < indices.size) {
-
                 if (ejecutar) {
                     if (!estaPausado()) {
-
+                        pasarCartas(i)
                         dormir(3000)
-                        act.runOnUiThread {
-                            var mediaPlayer = MediaPlayer.create(act, act.audio(i))
-                            act.binding.mazo.setBackgroundResource(act.imagen(i))
-                            act.binding.imprimir.setText("${i}")
-                            mediaPlayer.start()
-                            mediaPlayer.setOnCompletionListener {
-                                mediaPlayer.release()
-                            }
-                        }
-
                         i++
                     }
                 }
                 if(i==indices.size-1){
                     mazoCompleto = true
                     ejecutar=false
+
                 }
             }
+    }
+    fun pasarCartas(co:Int){
+        act.runOnUiThread {
+            var mediaPlayer= MediaPlayer.create(act, act.audio(co))
+            act.binding.mazo.setBackgroundResource(act.imagen(co))
+            mediaPlayer.start()
+            mediaPlayer.setOnCompletionListener {
+                mediaPlayer.release()
+            }
+        }
     }
     fun dormir(ti:Long){
         sleep(ti)

@@ -34,7 +34,7 @@
         android:id="@+id/pausar"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:text="Pausar Juego"></Button>
+        android:text="¡¡LOTERIA!!"></Button>
 
     <Button
         android:id="@+id/terminar"
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/imprimir"
-        android:text="sin iniciar"
+        android:text=""
         android:gravity="center"
         ></TextView>
 </LinearLayout>

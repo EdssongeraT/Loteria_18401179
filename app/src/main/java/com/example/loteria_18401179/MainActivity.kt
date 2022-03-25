@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding.pausar.isEnabled=false
 
         binding.barajear.setOnClickListener{
-                indices.shuffle()
+            indices.shuffle()
 
         }
 
@@ -37,38 +37,42 @@ class MainActivity : AppCompatActivity() {
                 setTitle("juego en curso")
 
                 j.mazoCompleto = false
-                mp = MediaPlayer.create(this, R.raw.inicio)
+
                 binding.iniciar.isEnabled = false
                 binding.barajear.isEnabled = false
                 binding.pausar.isEnabled = true
-                binding.terminar.isEnabled = true
-                mp.start()
+
                 if (!j.ejecutar) {
                     j.i = 0
                     j.ejecutar = true
-
+                    j.despausarHilo()
                 } else if (j.ejecutar) {
+                    mp = MediaPlayer.create(this, R.raw.inicio)
+                    mp.start()
                     j.start()
                     j.dormir(3000)
                 }
             }else{
-                    setTitle("espera a que termine el juego anterior")
+                setTitle("espera a que termine el juego anterior")
             }
         }
 
         binding.pausar.setOnClickListener{
             if (j.estaPausado()){
                 j.despausarHilo()
-                binding.pausar.setText("pausar juego")
+                binding.terminar.isEnabled=false
+                binding.pausar.setText("¡¡LOTERIA!!")
             }else if(!j.estaPausado()){
                 j.pausarHIlo()
-                binding.pausar.setText("reanudar juego")
+                binding.terminar.isEnabled=true
+                binding.pausar.setText("Se equivoco")
             }
         }
 
         binding.terminar.setOnClickListener {
             setTitle("comprobando cartas")
             binding.pausar.isEnabled = false
+            binding.pausar.setText("¡¡LOTERIA!!")
             binding.terminar.isEnabled = false
             j.terminarHilo()
             if (j.mazoCompleto) {
@@ -87,15 +91,13 @@ class MainActivity : AppCompatActivity() {
                 val corutina = GlobalScope.launch {
                     delay(5000)
                     while (indice < indices.size) {
-
                         var mpl=MediaPlayer.create(this@MainActivity, audio(indice))
                         this@MainActivity.runOnUiThread {
-                            binding.imprimir.setText("${indice}")
                             binding.mazo.setBackgroundResource(imagen(indice))
                         }
                         mpl.start()
-                        mpl.setOnCompletionListener { mp.release() }
-                        delay(3000)
+                        mpl.setOnCompletionListener { mpl.release()}
+                        delay(300)
                         indice++
                         if(indice==indices.size-1){
                             j.mazoCompleto =true
@@ -123,4 +125,3 @@ class MainActivity : AppCompatActivity() {
         return resources.getIdentifier(nombre, "raw", packageName)
     }
 }
-
